@@ -62,7 +62,6 @@ int main(){ //main
       cin.ignore(1000000, '\n');
 
       add(studentName, id, gpa);
-      print(head);
     }else if(strcmp(input, "print") == 0){
       print(head);
     }else if(strcmp(input, "exit") == 0){
