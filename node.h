@@ -11,7 +11,7 @@ class Node{
  public:
   Node(Student*);
   ~Node(); //destructor
-  void setStudent(Student*); //set the student
+  void setStudent(Student* newNext); //set the student
   Student* getStudent(); //returns student
   void setNext(Node* newNext); //sets the name
   Node* getNext(); //returns next node in list
