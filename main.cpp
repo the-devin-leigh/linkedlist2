@@ -11,25 +11,27 @@ using namespace std;
 
 Node* head = NULL; //first node
 
-void add(Node* current, char* name, int id, float gpa){//adds the student to the end of the list
-  Student* newStudent = new Student(name, id, gpa);
-  
-  if(head == NULL){ //first node
-    head = new Node(newStudent); //make new node for head
-  }else if(newStudent->getID() < head->getStudent()->getID()){ //new node ID less than head 
-    Node* temp = new Node(head->getStudent());
-    temp->setNext(head->getNext());
+void add(Node *&head, Student *newStudent){
+
+  if(head == NULL){ //if the current node has no student
+    head = new Node(newStudent);
+    head->setStudent(newStudent);
+  }else if(head->getStudent()->getID() > newStudent->getID()){ 
+    Node* temp = head; //make a node with new student AFTER head
     head->setStudent(newStudent);
     head->setNext(temp);
-  }else if(current->getNext() == NULL){ //at end of list already
-    Node* newNode = new Node(newStudent);
-    current->setNext(newNode);
-  }else if(newStudent->getID() > current->getStudent()->getID()){ //new nodeID more than head
-    Node* newNode = new Node(newStudent);
-    newNode->setNext(current->getNext());
-    current->setNext(newNode);
-  }else{ //recursion
-    add(current->getNext(), name, id, gpa);
+  }else if (head->getNext() == NULL){ //if there is no student in list after head
+    Node* temp = new Node(newStudent); //make a node with new student in the empty spot
+    temp->setStudent(newStudent);
+    head->setNext(temp);
+  }else if (head->getNext()->getStudent()->getID() > newStudent->getID()){
+    Node* temp = new Node(newStudent);//make a node with new student after next node
+    temp->setStudent(newStudent);
+    temp->setNext(head->getNext());
+    head->setNext(temp);
+  }else{
+    Node* next = head->getNext(); //recursion
+    add(next, newStudent);
   }
 }
 
@@ -73,7 +75,7 @@ char choice;
 	next->~Node();
 	head = NULL;
       }else{ //moving it to the end
-	head = next -> getNext();
+	head = next->getNext();
 	next->~Node();
 	del(head, NULL, id);
       }
@@ -110,7 +112,7 @@ char choice;
 
 int main(){ //main 
   int active = 0;
-
+  
   while(active == 0){
     char* input = new char[50];
     char* studentName = new char[50];
@@ -135,7 +137,8 @@ int main(){ //main
       cin.clear();
       cin.ignore(1000000, '\n');
 
-      add(head, studentName, id, gpa);
+      Student *newStudent = new Student(studentName, id, gpa);
+      add(head, newStudent);
     }else if(strcmp(input, "print") == 0){
       print(head);
     }else if(strcmp(input, "exit") == 0){
